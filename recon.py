@@ -9,8 +9,22 @@ from scapy.all import sniff, wrpcap
     savefile  : nom du fichier .pcap pour sauvegarder la capture
     """
 
-def sniff_interface(interface, count, filter):
+    print(f"Sniffing de l'{interface} ...")
+    if flt:
+        print(f"Filtre appliqué : {flt}")
 
-    
-    sniff(iface=interface, count=count, filter=filter)
-    sniff(filter="tcp", count=5)
+# Capture des paquets
+    packets = sniff(iface=interface, count=count, filter=flt)
+
+    print(f"Capture terminée : {len(packets)} paquets collectés")
+
+# Affichage résumé
+    print("Résumé des paquets :")
+    packets.summary()
+
+    # Sauvegarde si demandée
+    if savefile:
+        wrpcap(savefile, packets)
+        print(f"Capture sauvegardée dans {savefile}")
+
+    return packets
